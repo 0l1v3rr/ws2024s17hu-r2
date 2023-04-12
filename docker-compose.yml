@@ -42,6 +42,16 @@ services:
       traefik.enable: "true"
       traefik.http.routers.stage-planner.rule: HostRegexp(`{_:stage-planner\..*}`)
       traefik.http.services.stage-planner.loadbalancer.server.port: 80
+  backend:
+    image: webdevops/php-nginx-dev:8.2
+    volumes:
+      - ./www/backend-laravel:/app
+    environment:
+      WEB_DOCUMENT_ROOT: /app/public
+    labels:
+      traefik.enable: "true"
+      traefik.http.routers.backend.rule: HostRegexp(`{_:backend\..*}`)
+      traefik.http.services.backend.loadbalancer.server.port: 80
   backend-2:
     image: jani888/backend-2.ub2023.hu:latest
     command: 'php artisan serve --host=0.0.0.0'

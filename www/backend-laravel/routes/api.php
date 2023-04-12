@@ -1,19 +1,23 @@
 <?php
 
-use Illuminate\Http\Request;
+use App\Http\Controllers\LoginController;
+use App\Http\Controllers\RunnerController;
+use App\Http\Controllers\StageController;
+use App\Http\Controllers\TeamController;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Route;
 
-/*
-|--------------------------------------------------------------------------
-| API Routes
-|--------------------------------------------------------------------------
-|
-| Here is where you can register API routes for your application. These
-| routes are loaded by the RouteServiceProvider and all of them will
-| be assigned to the "api" middleware group. Make something great!
-|
-*/
+Route::prefix('v1')->group(function () {
+    Route::delete('reset', function () {
+        DB::unprepared(file_get_contents(storage_path("/ub2023.sql")));
+        return response()->json(['status' => 'OK']);
+    });
 
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-    return $request->user();
+    Route::post('login', [LoginController::class, 'login']);
+    Route::get('stages', [StageController::class, 'index']);
+
+    Route::middleware('auth.bearer')->group(function () {
+        Route::apiResource('teams', TeamController::class)->only(['show', 'update', 'destroy']);
+        Route::apiResource('teams/{teamId}/runners', RunnerController::class);
+    });
 });
