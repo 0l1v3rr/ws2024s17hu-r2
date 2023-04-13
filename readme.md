@@ -12,7 +12,7 @@ You can find the necessary accessories in the repo below: [https://github.com/ws
 
 ## Setup
 
-> Warning  
+> **Warning**  
 > Be aware that the `vendor` and the `node_modules` folders were not committed.
 
 ```sh
