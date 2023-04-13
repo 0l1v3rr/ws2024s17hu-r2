@@ -26,3 +26,18 @@ export interface Team {
   plannedStartingTime: string;
   startingTime: null | string;
 }
+
+export interface NextRun {
+  stage: {
+    id: number;
+    startingLocation: string;
+    arrivalLocation: string;
+    distance: number;
+    name: string;
+  };
+  previousRunner: Runner | null;
+  nextRunner: Runner | null;
+  canStart: boolean;
+  plannedStartTime: string;
+  plannedFinishTime: string;
+}

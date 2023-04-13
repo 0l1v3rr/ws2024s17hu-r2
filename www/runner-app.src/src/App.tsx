@@ -5,6 +5,7 @@ import { useLocalStorage } from "./hooks/useLocalStorage";
 import axios from "axios";
 import Header from "./components/Header";
 import BeforeTheRace from "./components/BeforeTheRace";
+import Today from "./components/Today";
 
 const App = () => {
   const [params] = useSearchParams();
@@ -66,7 +67,11 @@ const App = () => {
       <Header runnerName={runner.firstName} teamName={team.name} />
 
       <div className="px-4 h-full">
-        {dayDifference > 0 && <BeforeTheRace dayDifference={dayDifference} />}
+        {dayDifference > 0 ? (
+          <BeforeTheRace dayDifference={dayDifference} />
+        ) : (
+          <Today team={team} runner={runner} currentDate={date} />
+        )}
       </div>
     </div>
   );
