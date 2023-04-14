@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { NextRun, Runner, Team } from "../types";
+import { Me, Runner, Team } from "../types";
 import axios from "axios";
 import BeforeStart from "./BeforeStart";
 
@@ -10,8 +10,8 @@ type Props = {
 };
 
 const Today = ({ runner, currentDate }: Props) => {
-  const [nextRun, setNextRun] = useState<NextRun>();
-  const startingTime = new Date(nextRun?.plannedStartTime ?? "");
+  const [me, setMe] = useState<Me>();
+  const startingTime = new Date(me?.team?.plannedStartingTime ?? "");
 
   // time difference between the fakeDate and the plannedStartTime in minutes
   const minuteDifference =
@@ -21,20 +21,20 @@ const Today = ({ runner, currentDate }: Props) => {
 
   useEffect(() => {
     axios
-      .get<NextRun>("http://backend-2.localhost/api/v1/nextRun", {
+      .get<Me>("http://backend-2.localhost/api/v1/me", {
         headers: { Authorization: `Bearer ${runner.token}` },
       })
-      .then((res) => setNextRun(res.data));
+      .then((res) => setMe(res.data));
   }, [runner.token]);
 
   // if the nextRun is not loaded yet
-  if (nextRun === undefined) return null;
+  if (me === undefined) return null;
 
   return (
     <div className="h-full flex flex-col gap-2">
       {minuteDifference > 0 && (
         <BeforeStart
-          nextRun={nextRun}
+          me={me}
           startingTime={startingTime}
           runner={runner}
           currentDate={currentDate}
