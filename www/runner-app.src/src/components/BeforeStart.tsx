@@ -26,6 +26,19 @@ const BeforeStart = ({ startingTime, runner, currentDate }: Props) => {
       .then((res) => setNextRun(res.data));
   }, [runner.token]);
 
+  const startHandover = async () => {
+    if (nextRun === undefined) return;
+
+    await axios.post(
+      "http://backend-2.localhost/api/v1/handover/start",
+      {
+        stageId: nextRun.stage.id,
+        time: currentDate.toISOString(),
+      },
+      { headers: { Authorization: `Bearer ${runner.token}` } }
+    );
+  };
+
   return (
     <>
       <div
@@ -78,6 +91,7 @@ const BeforeStart = ({ startingTime, runner, currentDate }: Props) => {
 
         <button
           disabled={!iAmTheOneWhoRunsFirst}
+          onClick={() => startHandover()}
           className="bg-blue-secondary rounded-full w-full text-white px-4 py-2 
             disabled:bg-zinc-300 disabled:text-zinc-500"
         >

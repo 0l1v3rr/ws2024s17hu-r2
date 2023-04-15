@@ -6,25 +6,23 @@ import axios from "axios";
 import Header from "./components/Header";
 import BeforeTheRace from "./components/BeforeTheRace";
 import Today from "./components/Today";
+import { useCurrentDate } from "./hooks/useCurrentDate";
+import { differenceInDays } from "./utils";
 
 const App = () => {
   const [params] = useSearchParams();
 
-  const date = useMemo(() => {
-    const fakeDate = params.get("fakeDate");
-    return fakeDate !== null ? new Date(fakeDate) : new Date();
-  }, [params]);
+  // the date gets updated every 1 seconds
+  const date = useCurrentDate();
 
   const [token, setToken] = useLocalStorage<string | null>("token", null);
   const [runner, setRunner] = useState<Runner | null>(null);
   const [team, setTeam] = useState<Team>();
 
-  const dayDifference: number = useMemo(() => {
-    const plannedStartingTime = new Date(team?.plannedStartingTime ?? "");
-    const diff = plannedStartingTime.getTime() - date.getTime();
-
-    return Math.round(diff / (1000 * 60 * 60 * 24));
-  }, [team, date]);
+  const dayDifference = useMemo(
+    () => differenceInDays(date, new Date(team?.plannedStartingTime ?? "")),
+    [team, date]
+  );
 
   useEffect(() => {
     // decide which token should be used to log in
