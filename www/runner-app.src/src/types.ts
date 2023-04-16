@@ -53,3 +53,9 @@ export interface CurrentRunner {
 export interface Me extends Runner {
   team: Team;
 }
+
+export type MayBeFinished<T> =
+  | {
+      finished: true;
+    }
+  | T;

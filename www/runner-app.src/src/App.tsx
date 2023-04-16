@@ -3,7 +3,7 @@ import { useSearchParams } from "react-router-dom";
 import { LoginResponse, Runner, Team } from "./types";
 import { useLocalStorage } from "./hooks/useLocalStorage";
 import axios from "axios";
-import Header from "./components/Header";
+import Header from "./components/ui/Header";
 import BeforeTheRace from "./components/BeforeTheRace";
 import Today from "./components/Today";
 import { useCurrentDate } from "./hooks/useCurrentDate";

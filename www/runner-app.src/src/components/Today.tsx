@@ -1,6 +1,5 @@
-import { useState, useEffect } from "react";
-import { Me, Runner, Team } from "../types";
-import axios from "axios";
+import { useState } from "react";
+import { Runner, Team } from "../types";
 import BeforeStart from "./BeforeStart";
 import RaceStarted from "./RaceStarted";
 
@@ -10,31 +9,24 @@ type Props = {
   currentDate: Date;
 };
 
-const Today = ({ runner, currentDate }: Props) => {
-  const [me, setMe] = useState<Me>();
-  const startingTime = new Date(me?.team?.plannedStartingTime ?? "");
+const Today = ({ runner, currentDate, team }: Props) => {
+  const startingTime = new Date(team.startingTime ?? team.plannedStartingTime);
 
-  useEffect(() => {
-    axios
-      .get<Me>("http://backend-2.localhost/api/v1/me", {
-        headers: { Authorization: `Bearer ${runner.token}` },
-      })
-      .then((res) => setMe(res.data));
-  }, [runner.token]);
-
-  // if the me is not loaded yet
-  if (me === undefined) return null;
+  // if the startingTime is null, the race has already started
+  const [raceStarted, setRaceStarted] = useState<boolean>(
+    team.startingTime !== null
+  );
 
   return (
     <div className="h-full flex flex-col gap-2">
-      {me?.team.startingTime !== null ? (
+      {raceStarted ? (
         <RaceStarted runner={runner} currentDate={currentDate} />
       ) : (
         <BeforeStart
-          me={me}
           startingTime={startingTime}
           runner={runner}
           currentDate={currentDate}
+          startRace={() => setRaceStarted(true)}
         />
       )}
     </div>

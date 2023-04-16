@@ -18,3 +18,7 @@ export const differenceInMinutes = (startingDate: Date, finishDate: Date) => {
     (startingDate.getHours() * 60 + startingDate.getMinutes())
   );
 };
+
+export const dateDifference = (startingDate: Date, finishDate: Date): Date => {
+  return new Date(finishDate.valueOf() - startingDate.valueOf());
+};
